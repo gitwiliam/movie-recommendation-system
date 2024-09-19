@@ -1,0 +1,36 @@
+-- Insert into Users
+INSERT INTO Users (username, email, signup_date, age, gender) VALUES
+('Alice', 'alice@example.com', '2024-01-01', 25, 'F'),
+('Bob', 'bob@example.com', '2024-02-01', 30, 'M');
+
+-- Insert into Movies
+INSERT INTO Movies (title, release_year, director, duration, description) VALUES
+('Inception', 2010, 'Christopher Nolan', 148, 'A mind-bending thriller about dreams within dreams.'),
+('The Matrix', 1999, 'The Wachowskis', 136, 'A hacker discovers the true nature of reality and his role in the war against its controllers.');
+
+-- Insert into Genres
+INSERT INTO Genres (genre_name) VALUES
+('Action'),
+('Sci-Fi'),
+('Thriller');
+
+-- Insert into Movie_Genres
+INSERT INTO Movie_Genres (movie_id, genre_id) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 2);
+
+-- Insert into Ratings
+INSERT INTO Ratings (user_id, movie_id, rating, rating_date) VALUES
+(1, 1, 9, '2024-01-15'),
+(2, 2, 8, '2024-02-15');
+
+
+
+CALL Get_Top_Recommendations(1); -- Replace 1 with the actual user_id
+
+
+
+
+
