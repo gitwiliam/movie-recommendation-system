@@ -1,0 +1,48 @@
+Advanced SQL Features
+
+
+DELIMITER //
+
+CREATE PROCEDURE Get_Top_Recommendations(IN userId INT)
+BEGIN
+    SELECT
+        m.movie_id,
+        m.title,
+        COALESCE(rc.recommendation_score, 0) + COALESCE(cb.recommendation_score, 0) AS total_score
+    FROM Movies m
+    LEFT JOIN Recommendations rc ON m.movie_id = rc.movie_id AND rc.user_id = userId
+    LEFT JOIN Content_Based_Recommendations cb ON m.movie_id = cb.movie_id AND cb.user_id = userId
+    WHERE COALESCE(rc.recommendation_score, 0) + COALESCE(cb.recommendation_score, 0) > 0
+    ORDER BY total_score DESC
+    LIMIT 10;
+END //
+
+DELIMITER ;
+
+
+
+Views for Analytics:
+
+
+-- View for top-rated movies
+CREATE VIEW Top_Rated_Movies AS
+SELECT
+    m.movie_id,
+    m.title,
+    AVG(r.rating) AS average_rating
+FROM Movies m
+JOIN Ratings r ON m.movie_id = r.movie_id
+GROUP BY m.movie_id
+HAVING AVG(r.rating) >= 8
+ORDER BY average_rating DESC;
+
+-- View for genre popularity
+CREATE VIEW Genre_Popularity AS
+SELECT
+    g.genre_name,
+    COUNT(*) AS movie_count
+FROM Movies m
+JOIN Movie_Genres mg ON m.movie_id = mg.movie_id
+JOIN Genres g ON mg.genre_id = g.genre_id
+GROUP BY g.genre_name
+ORDER BY movie_count DESC;
